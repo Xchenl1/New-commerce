@@ -1,0 +1,17 @@
+Name: address-api
+Host: 0.0.0.0
+Port: 8888
+Auth:
+  AccessSecret: "!!!电商系统！！！"
+  AccessExpire: 604800
+Mysql:
+  host: 127.0.0.1
+  port: 3306
+  config: "charset=utf8&parseTime=True&loc=Local"
+  db: e-commerce_system
+  user: root
+  password: CHEN2580
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password:

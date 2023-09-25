@@ -1,0 +1,55 @@
+type (
+	AddressCreateRequest {
+		Name    string `form:"name"`
+		Address string `form:"address"`
+		Phone   string `form:"phone"`
+	}
+	AddressUpdateRequest {
+		Name    string `form:"name"`
+		Address string `form:"address"`
+		Phone   string `form:"phone"`
+		Id      int    `form:"id"`
+	}
+	AddressDeleteRequest {
+		Id int `form:"id"`
+	}
+	AddressGetIdResquest {
+		Id int `form:"id"`
+	}
+)
+
+type (
+	Response {
+		Status int         `json:"status"`
+		Data   interface{} `json:"data"`
+		Msg    string      `json:"msg"`
+		Error  string      `json:"error"`
+	}
+	ResponseList {
+		Data   interface{} `json:"data"`
+		Total  int         `json:"total"`
+		Status int         `json:"status"`
+		Msg    string      `json:"msg"`
+		Error  string      `json:"error"`
+	}
+)
+
+@server(
+	jwt: Auth
+)
+service address-api {
+	@handler AddressCreateHandler//创建地址
+	post /address/create(AddressCreateRequest) returns (Response)
+	
+	@handler AddressGetHandler//获取地址
+	get /address/show (AddressGetIdResquest)returns (Response)
+	
+	@handler AddressUpdateHandler//修改地址
+	post /address/update (AddressUpdateRequest) returns (Response)
+	
+	@handler AddressDeleteHandler//删除地址
+	delete /addresses/delete(AddressDeleteRequest)returns (Response)
+	
+	@handler AddressListHandler//获取地址列表
+	get /addresses/list returns (ResponseList)
+}

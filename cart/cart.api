@@ -1,0 +1,46 @@
+type (
+	CartCreateRequset {
+		BossId    int `form:"bossId"`
+		ProductId int `form:"productId"`
+		Num       int `form:"num"`
+	}
+	CartUpdateRequest {
+		Num int `form:"num"`
+		Id  int `form:"id"`
+	}
+	CartDeleteRequest {
+		Id int `form:"id"`
+	}
+	CartGetIdResquest {
+		Id int `form:"id"`
+	}
+)
+
+type (
+	Response {
+		Status int         `json:"status"`
+		Data   interface{} `json:"data"`
+		Msg    string      `json:"msg"`
+		Error  string      `json:"error"`
+	}
+)
+
+@server(
+	jwt: Auth
+)
+service cart-api {
+	@handler CartCreateHandler//创建购物车
+	post /Cart/create(CartCreateRequset) returns (Response)
+	
+	@handler CartGetHandler//获取购物车
+	get /Cart/show returns (Response)
+	
+	@handler CartUpdateHandler//修改购物车
+	post /Cart/update (CartUpdateRequest) returns (Response)
+	
+	@handler CartDeleteHandler//删除购物车
+	delete /Cart/delete(CartDeleteRequest) returns (Response)
+	
+	@handler CartListHandler//获取购物车
+	get /Cart/list(CartGetIdResquest) returns (Response)
+}

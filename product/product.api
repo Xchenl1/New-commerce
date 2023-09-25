@@ -1,0 +1,63 @@
+type (
+	ProductCreateRequest {
+		Name          string `form:"name"`
+		CategoryId    uint   `form:"categoryId"`
+		Title         string `form:"title"`
+		Info          string `form:"info"`
+		Price         string `form:"price"`
+		DiscountPrice string `form:"discountPrice"`
+		Onsale        bool   `form:"onsale"`
+		Num           int    `form:"num"`
+	}
+	ProductListRequset {
+		CategoryId int `form:"categoryId"`
+		PageNum    int `form:"pageNum"`
+		PageSize   int `form:"pageSize"`
+	}
+	ProductSelectRequst {
+		Info string `form:"info"`
+	}
+	ProductShowRequst {
+		Id int `form:"id"`
+	}
+	ProductImgRequest {
+		Id int `form:"id"`
+	}
+)
+type Response {
+	Status int         `json:"status"`
+	Data   interface{} `json:"data"`
+	Msg    string      `json:"msg"`
+	Error  string      `json:"error"`
+}
+type ResponseList {
+	Data   interface{} `json:"data"`
+	Total  int         `json:"total"`
+	Status int         `json:"status"`
+	Msg    string      `json:"msg"`
+	Error  string      `json:"error"`
+}
+
+@server(
+	jwt: Auth
+	middleware: ProjwtAuth
+)
+service product-api {
+	@handler ProductHandler//创建商品
+	post /product/create(ProductCreateRequest) returns (Response)
+
+	@handler ProductListHandler//获取商品列表
+	get /product/list(ProductListRequset) returns (Response)
+
+	@handler ProductSelectHandler//搜索商品
+	post /product/search (ProductSelectRequst) returns (ResponseList)
+
+	@handler ProductShowHandler//获取商品详细的信息
+	get /product/:id (ProductShowRequst) returns (Response)
+
+	@handler ProductImgHandler//获取图片地址
+	get /img/:id (ProductImgRequest) returns (Response)
+
+	@handler ProductCategory//获取分类
+	get /category/:id () returns (Response)
+}

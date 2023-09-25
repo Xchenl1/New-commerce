@@ -1,0 +1,67 @@
+type (
+	UserLoginRequest {
+		Username string `form:"username"`
+		Password string `form:"password"`
+		Key      string `form:"key"`
+	}
+	UserRegisterRequest {
+		Nickname string `form:"nick_name"`
+		Username string `form:"user_name"`
+		Password string `form:"password"`
+		Key      string `form:"key"`
+	}
+	UserUpdateNickRequest {
+		Nickname string `form:"nickname"`
+	}
+	UserImageUplaodRequest {
+	}
+	UserSendEmail {
+		Email         string `form:"email"`
+		Password      string `form:"password"`
+		OperationType string `form:"operationType"`
+	}
+	UserValidEmail {
+		Token string `form:"token"`
+	}
+)
+
+type Response {
+	Status int         `json:"status"`
+	Data   interface{} `json:"data"`
+	Msg    string      `json:"msg"`
+	Error  string      `json:"error"`
+}
+
+@server(
+	middleware:cors
+)
+service user-api {
+	//用户登录
+	@handler UserLoginHandler
+	post /user/login(UserLoginRequest) returns (Response)
+	//用户注册
+	@handler UserRegistrHandler
+	post /user/register(UserRegisterRequest) returns(Response)
+}
+
+@server(
+	jwt: Auth
+	middleware:jwtAuth,cors
+)
+service user-api{
+	//获取信息
+	@handler UserGetidHandler
+	get /user/:id returns (Response)
+	//更新用户昵称
+	@handler UserUpdateHandler
+	post /user/update(UserUpdateNickRequest) returns(Response)
+	//图片上传
+	@handler UserImageUpload
+	post /user/image(UserImageUplaodRequest) returns (Response)
+	//1绑定邮箱。2解绑邮箱。3修改密码
+	@handler UserSendEmail
+	post /user/sendemail(UserSendEmail) returns (Response)
+	//验证邮箱
+	@handler UserValidEmail
+	post /user/validemail(UserValidEmail) returns (Response)
+}

@@ -1,0 +1,52 @@
+type (
+	OrderCreate {
+		ProductId uint `form:"productId"`
+		Num       int  `form:"num"`
+		AddressId int  `form:"addressId"`
+		Money     int  `form:"money"`
+		BossId    uint `form:"bossId"`
+		UserId    uint `form:"userId"`
+		OrderNum  int  `form:"orderNum"`
+		Type      int  `form:"type"`
+	}
+	OrderGetIdResquest {
+		UserId uint `form:"userId"`
+		Id     int  `form:"id"`
+	}
+	DeleteOrderIdRequest {
+		OrderId int `form:"orderId"`
+		Userid  int `form:"userid"`
+	}
+	PayOrderRequest {
+		Num        int `form:"num"`
+		Money      int `form:"money"`
+		OrderNum   int `form:"orderNum"`
+		Product_id int `form:"productId"`
+		Boss_id    int `form:"bossId"`
+		Order_id   int `form:"orderId"`
+	}
+)
+
+type Response {
+	Status int         `json:"status"`
+	Data   interface{} `json:"data"`
+	Msg    string      `json:"msg"`
+	Error  string      `json:"error"`
+}
+
+@server(
+	jwt: Auth
+)
+service order-api {
+	@handler OrderCreateHandler//创建订单
+	post /order/create(OrderCreate) returns (Response)
+	
+	@handler OrderGetHandler//获取订单
+	get /order/show (OrderGetIdResquest)returns (Response)
+	
+	@handler OrderDeleteHandler//删除订单
+	delete /order/delete(DeleteOrderIdRequest)returns (Response)
+	
+	@handler PayOrderHandler//支付订单
+	post /order/pay (PayOrderRequest)returns (Response)
+}
